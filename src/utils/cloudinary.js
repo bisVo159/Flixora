@@ -18,11 +18,11 @@ export const uploadOnCloudinary = async (filePath, resourceType = 'auto', folder
         });
         fs.unlinkSync(filePath); // Remove the file after upload
         console.log(`${resourceType.charAt(0).toUpperCase() + resourceType.slice(1)} uploaded successfully:`, result.secure_url);
-        return result.secure_url;
+        return result;
     } catch (error) {
         fs.unlinkSync(filePath); // Ensure the file is removed even if upload fails
         console.error(`Error uploading ${resourceType}:`, error);
-        throw error;
+        return null;
     }
 };
 
