@@ -9,6 +9,10 @@ cloudinary.config({
     api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
+const extractPublicId = (url) => {
+    return url.split("/").slice(-2).join("/").split(".")[0];
+};
+
 export const uploadOnCloudinary = async (filePath, resourceType = 'auto', folder = '') => {
     try {
         if (!fs.existsSync(filePath)) {
@@ -25,6 +29,22 @@ export const uploadOnCloudinary = async (filePath, resourceType = 'auto', folder
         fs.unlinkSync(filePath); // Ensure the file is removed even if upload fails
         console.error(`Error uploading ${resourceType}:`, error);
         return null;
+    }
+};
+
+export const deleteFromCloudinary = async (url) => {
+    try {
+        const result = await cloudinary.uploader.destroy(extractPublicId(url));
+        if (result.result === 'ok') {
+            console.log('File deleted successfully from Cloudinary');
+            return true;
+        } else {
+            console.error('Failed to delete file from Cloudinary:', result);
+            return false;
+        }
+    } catch (error) {
+        console.error('Error deleting file from Cloudinary:', error);
+        return false;
     }
 };
 
