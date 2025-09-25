@@ -13,10 +13,12 @@ app.use(express.static("public"));
 app.use(cookieParser());
 
 // routes
-import userRoutes from "./routes/user.routes.js";
-import videoRoutes from "./routes/video.routers.js";
+import healthcheckRouter from "./routes/healthcheck.routes.js";
+import userRouter from "./routes/user.routes.js";
+import videoRouter from "./routes/video.routers.js";
 
-app.use("/api/v1/users", userRoutes);
-app.use("/api/v1/videos", videoRoutes);
+app.use("/api/v1/healthcheck", healthcheckRouter);
+app.use("/api/v1/users", userRouter);
+app.use("/api/v1/videos", videoRouter);
 
 export {app};
