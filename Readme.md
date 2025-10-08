@@ -70,4 +70,4 @@ This is the backend for Flixora, a comprehensive video streaming platform simila
 
 **Anik Biswas**  
 📍 Kolkata, India  
-🚀 Building backend, generative AI, and AIML applications.s
+🚀 Building backend, generative AI, and AIML applications.
