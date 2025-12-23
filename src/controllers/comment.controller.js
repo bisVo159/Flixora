@@ -8,7 +8,7 @@ const getVideoComments = asyncHandler(async (req, res) => {
     const {videoId} = req.params
     const {page = 1, limit = 10} = req.query
     const query = Comment.aggregate([
-        {$match: {video: mongoose.Types.ObjectId(videoId)}},
+        {$match: {video: new mongoose.Types.ObjectId(String(videoId))}},
         {$sort: {createdAt: -1}},
         {
             $lookup: {

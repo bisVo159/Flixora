@@ -17,14 +17,14 @@ const getChannelStats = asyncHandler(async (req, res) => {
     const [totalVideos,totalViews ,totalPlaylists, totalSubscribers, totalLikes, totalLikesInVideos] = await Promise.all([
         Video.countDocuments({owner: userId}),
         Video.aggregate([
-            { $match: { owner: new mongoose.Types.ObjectId.createFromHexString(userId) } },
+            { $match: { owner: new mongoose.Types.ObjectId(String(userId)) } },
             { $group: { _id: null, totalViews: { $sum: "$views" } } }
         ]),
         Playlist.countDocuments({owner: userId}),
         Subscription.countDocuments({channel: userId}),
         Like.countDocuments({likedBy: userId}),
         Video.aggregate([
-            { $match: { owner: new mongoose.Types.ObjectId.createFromHexString(userId) } },
+            { $match: { owner: new mongoose.Types.ObjectId(String(userId)) } },
             { $lookup: { from: "likes", localField: "_id", foreignField: "video", as: "likes" } },
             // { $unwind: "$likes" },
             // { $group: { _id: null, totalLikes: { $sum: 1 } } }
