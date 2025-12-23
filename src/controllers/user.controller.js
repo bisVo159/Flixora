@@ -319,7 +319,7 @@ const getUserChannelProfile = asyncHandler(async (req, res) => {
     }
 
     const channel=await User.aggregate([
-        { $match: { username: username.trim() } },
+        { $match: { username: username.trim().toLowerCase()  } },
         {
             $lookup: {
                 from: "subscriptions",
@@ -374,7 +374,7 @@ const getUserChannelProfile = asyncHandler(async (req, res) => {
 
 const getWatchHistory = asyncHandler(async (req, res) => {
     const user = await User.aggregate([
-        { $match: { _id: new mongoose.Types.ObjectId.createFromHexString(req.user?.id) } },
+        { $match: { _id: new mongoose.Types.ObjectId(String(req.user.id)) } },
         {
             $lookup: {
                 from: "videos",

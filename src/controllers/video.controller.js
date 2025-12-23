@@ -15,7 +15,7 @@ const getAllVideos = asyncHandler(async (req, res) => {
     }
 
     const pipeline=[
-        { $match: { owner: new mongoose.Types.ObjectId.createFromHexString(userId) } },
+        { $match: { owner: new mongoose.Types.ObjectId(String(userId)) } },
         { $sort: { [sortBy]: order === "desc" ? -1 : 1 } },
     ]
 
@@ -150,14 +150,14 @@ const deleteVideo = asyncHandler(async (req, res) => {
         throw new ApiError(403, "You are not authorized to delete this video");
     }
     const [videoDeleted, thumbnailDeleted] = await Promise.all([
-        deleteFromCloudinary(video.videoFile),
-        deleteFromCloudinary(video.thumbnail)
+        deleteFromCloudinary(video.videoFile,"video"),
+        deleteFromCloudinary(video.thumbnail,"image")
     ]);
 
     if(!videoDeleted || !thumbnailDeleted){
         throw new ApiError(500, "Failed to delete video or thumbnail from cloud");
     }
-    await video.remove();
+    await Video.findByIdAndDelete(videoId);
     res.status(200).json(
         new ApiResponse(200,null, "Video deleted successfully")
     );
